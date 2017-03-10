@@ -1,12 +1,14 @@
 def hangman()
+  system "cls"
   puts "Welcome to Hangman!"
-  puts "Try guessing the secret word!"
+  puts "Guess the word!"
   puts "Put only one letter"
+  puts "You have 5 attempts left"
   running = true
   index = 0
   attempts = 5
   guessed = []
-  wordlist = File.readlines("words-english.txt")
+  wordlist = File.readlines("myths-legends.txt")
   word = wordlist.sample
   hidden = []
   word.each_char do |x|
@@ -28,7 +30,7 @@ def hangman()
       guess.upcase!
       index = 0
       if attempts == 0
-        puts "You lose!"
+        puts "Unfortunate, you lose!"
         running = false
       end
       word.each_char do |x|
@@ -36,6 +38,7 @@ def hangman()
           hidden[index] = guess + " "
         else
           attempts -= 1
+          
         end
         index += 1
       end
@@ -47,13 +50,14 @@ def hangman()
       "
 
       guessed.to_s
+      puts "You have #{attempts} attempts left!"
       puts "Guessed letters: #{guessed}"
 
     end
     puts "
 
     "
-    puts "Congtrats you win."
+    puts "Congratulations! You won!"
     puts "You had #{attempts} attempts left!"
     running = false
   end
