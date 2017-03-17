@@ -3,11 +3,11 @@ def hangman()
   puts "Welcome to Hangman!"
   puts "Guess the word!"
   puts "Put only one letter"
-  puts "You have 5 attempts left"
+  attempts = 10
+  puts "You have #{attempts} attempts"
   running = true
-  rightguess = true
+  rightguess = false
   index = 0
-  attempts = 5
   guessed = []
   wordlist = File.readlines("myths-legends.txt")
   word = wordlist.sample
@@ -18,6 +18,7 @@ def hangman()
   end
   word = word.upcase!
   hidden.each do |z|
+    sleep 0.05
     print z
   end
 
@@ -26,42 +27,44 @@ def hangman()
       puts "
       "
       guess = gets.chomp
-      while guess == "" || guess ==" "
-        puts "Please type a letter"
-        guess = gets.chomp
-      end
       while guess.length > 1
         puts "Type only 1 letter"
         guess = gets.chomp
       end
+      while guess == "" || guess ==" "
+        puts "Please type a letter"
+        guess = gets.chomp
+      end
       guessed << guess
       guess.upcase!
-      if attempts == 1
-        puts "Unfortunate, you lose!"
-        running = false
-        break
-      end
-
-
+      index = 0
+      rightguess = false
       word.each_char do |x|
         if guess == x
           hidden[index] = guess + " "
           rightguess = true
-          index += 1
         else
-          rightguess = false
+          rightguess = false unless rightguess
         end
+        index += 1
       end
-      if rightguess != true
+      if rightguess == false
         attempts -= 1
       end
-      # system "cls"
+       system "cls"
       hidden.each do |z|
         print z
+      end
+      if attempts == 0
+        puts "Unfortunate, you lose!"
+        puts "The word was #{word}!"
+        running = false
+        break
       end
       if hidden.include?("_ ") == false
         puts "Congratulations! You won!"
         puts "You had #{attempts} attempts left!"
+        puts "You guessed these letters: #{guessed}"
         running = false
         break
       end
